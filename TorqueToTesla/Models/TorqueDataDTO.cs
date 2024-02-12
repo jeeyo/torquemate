@@ -9,7 +9,7 @@ namespace TorqueToTesla.Models;
 /// <remarks>
 /// https://github.com/briancline/torque-satellite/blob/master/doc/codes-table.md
 /// </remarks>
-public record TorqueDataDTO
+public partial record TorqueDataDTO
 {
   /// <summary>
   /// Email Address
@@ -36,22 +36,4 @@ public record TorqueDataDTO
   [FromQuery(Name = "time")]
   [ModelBinder(BinderType = typeof(Int64ToDateTimeModelBinder))]
   public DateTime Time { get; init; } = DateTime.UtcNow;
-
-  /// <summary>
-  /// Longitude (degrees)
-  /// </summary>
-  [FromQuery(Name = "kff1005")]
-  public double Longitude { get; init; } = 0;
-
-  /// <summary>
-  /// Latitude (degrees)
-  /// </summary>
-  [FromQuery(Name = "kff1006")]
-  public double Latitude { get; init; } = 0;
-
-  /// <summary>
-  /// Barometric Pressure (kPa)
-  /// </summary>
-  [FromQuery(Name = "k33")]
-  public double BarometricPressure { get; init; } = 0;
 }

@@ -1,5 +1,6 @@
 using Microsoft.OpenApi.Models;
 using Serilog;
+using TorqueToTesla.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,11 +8,13 @@ Log.Logger = new LoggerConfiguration()
             .ReadFrom.Configuration(builder.Configuration)
             .CreateLogger();
 
-// Add services to the container.
 builder.Host.UseSerilog();
 
+// Add services to the container.
 builder.Services.AddMemoryCache();
 builder.Services.AddControllers();
+
+builder.Services.AddSingleton<IStorageService, StorageService>();
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -50,6 +53,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 
 app.MapControllers();

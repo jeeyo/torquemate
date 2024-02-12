@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
 using TorqueToTesla.Models;
+using TorqueToTesla.Services;
 
 namespace TorqueToTesla.Controllers;
 
@@ -8,15 +8,15 @@ namespace TorqueToTesla.Controllers;
 [Route("v1/torque")]
 public class TorqueController : ControllerBase
 {
-  private readonly IMemoryCache _memoryCache;
-  
+  private readonly IStorageService _storageService;
+
   // Torque requires the upload endpoint to respond "OK!"
   private const string successMessage = "OK!";
 
-    public TorqueController(IMemoryCache memoryCache)
-    {
-      _memoryCache = memoryCache;
-    }
+  public TorqueController(IStorageService storageService)
+  {
+    _storageService = storageService;
+  }
 
   /// <summary>
   /// Store vehicle data from Torque Android App
