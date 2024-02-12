@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using TorqueToTesla.Models;
+using Serilog;
+using TorqueToTesla.Models.Torque;
 using TorqueToTesla.Services;
 
 namespace TorqueToTesla.Controllers;
@@ -9,9 +10,6 @@ namespace TorqueToTesla.Controllers;
 public class TorqueController : ControllerBase
 {
   private readonly IStorageService _storageService;
-
-  // Torque requires the upload endpoint to respond "OK!"
-  private const string successMessage = "OK!";
 
   public TorqueController(IStorageService storageService)
   {
@@ -27,7 +25,10 @@ public class TorqueController : ControllerBase
   [ProducesResponseType(StatusCodes.Status200OK)]
   public async Task<ActionResult> UploadTorque([FromQuery] TorqueDataDTO torqueData)
   {
+    Log.Debug("Received Torque data: {TorqueData}", torqueData);
     return Ok(torqueData);
-    // return Ok(successMessage);
+
+    // Torque requires the upload endpoint to respond "OK!"
+    // return Ok("OK!");
   }
 }

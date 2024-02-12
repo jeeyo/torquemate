@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TorqueToTesla.Utilities;
 
-namespace TorqueToTesla.Models;
+namespace TorqueToTesla.Models.Torque;
 
 /// <summary>
 /// Data Transfer Object for Torque data

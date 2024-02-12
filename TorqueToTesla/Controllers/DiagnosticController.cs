@@ -1,27 +1,16 @@
 using Microsoft.AspNetCore.Mvc;
-using TorqueToTesla.Models;
-using TorqueToTesla.Services;
+using TorqueToTesla.Models.Tesla;
 
 namespace TorqueToTesla.Controllers;
 
 [ApiController]
-[Route("v1/diagnostics")]
+[Route("v1/diagnostic")]
 public class DiagnosticController : ControllerBase
 {
-  private readonly IStorageService _storageService;
-
-  // Torque requires the upload endpoint to respond "OK!"
-  private const string successMessage = "OK!";
-
-  public DiagnosticController(IStorageService storageService)
-  {
-    _storageService = storageService;
-  }
-
   /// <summary>
   /// Returns the fake charge state
   /// </summary>
-  /// <response code="200">Returns the fake charge state/response>
+  /// <response code="200">Returns the fake charge state</response>
   [HttpGet("charge_state")]
   [ProducesResponseType(typeof(TeslaChargeState), StatusCodes.Status200OK, "application/json")]
   public ActionResult<TeslaChargeState> GetChargeState()
@@ -38,7 +27,7 @@ public class DiagnosticController : ControllerBase
   /// <summary>
   /// Returns the fake climate state
   /// </summary>
-  /// <response code="200">Returns the fake climate state/response>
+  /// <response code="200">Returns the fake climate state</response>
   [HttpGet("climate_state")]
   [ProducesResponseType(typeof(TeslaClimateState), StatusCodes.Status200OK, "application/json")]
   public ActionResult<TeslaClimateState> GetClimateState()

@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace TorqueToTesla.Models;
+namespace TorqueToTesla.Models.Tesla;
 
 /// <summary>
 /// Tesla Charge State

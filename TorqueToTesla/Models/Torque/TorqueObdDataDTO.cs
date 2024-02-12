@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace TorqueToTesla.Models;
+namespace TorqueToTesla.Models.Torque;
 
 public partial record TorqueDataDTO
 {
