@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using TorqueToToe.Models.Torque;
 using TorqueToToe.Services;
+using ILogger = Serilog.ILogger;
 
 namespace TorqueToToe.Controllers;
 
@@ -9,11 +10,12 @@ namespace TorqueToToe.Controllers;
 [Route("v1/torque")]
 public class TorqueController : ControllerBase
 {
-  private readonly IStorageService _storageService;
+  private readonly ITorqueStorageService _torqueStorageService;
+  private readonly ILogger _logger = Log.ForContext<TorqueController>();
 
-  public TorqueController(IStorageService storageService)
+  public TorqueController(ITorqueStorageService torqueStorageService)
   {
-    _storageService = storageService;
+    _torqueStorageService = torqueStorageService;
   }
 
   /// <summary>
@@ -25,7 +27,10 @@ public class TorqueController : ControllerBase
   [ProducesResponseType(StatusCodes.Status200OK)]
   public async Task<ActionResult> UploadTorque([FromQuery] TorqueDataDTO torqueData)
   {
-    Log.Debug("Received Torque data: {TorqueData}", torqueData);
+    // TODO: Use Bearer token as Device ID if provided
+
+    _logger.Information("Torque data uploaded: {TorqueData}", torqueData);
+    await _torqueStorageService.StoreTorqueData(torqueData);
 
     // Torque requires the upload endpoint to respond "OK!"
     return Ok("OK!");

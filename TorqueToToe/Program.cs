@@ -13,6 +13,8 @@ builder.Host.UseSerilog();
 // Add services to the container.
 builder.Services.AddLogging();
 builder.Services.AddControllers();
+builder.Services.AddNpgsqlDataSource(builder.Configuration.GetConnectionString("NpgsqlTorqueDatabase") ?? "");
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddSingleton<ITorqueStorageService, TorqueStorageService>();
 
@@ -46,6 +48,8 @@ builder.Host.UseSerilog();
 
 var app = builder.Build();
 
+app.UseSerilogRequestLogging();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -53,7 +57,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 
 app.MapControllers();

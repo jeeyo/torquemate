@@ -41,6 +41,18 @@ public partial record TorqueDataDTO
   public double ObdInstananeousCO2Emission { get; init; } = 0;
 
   /// <summary>
+  /// OBD Relative Throttle Position (%)
+  /// </summary>
+  [FromQuery(Name = "k45")]
+  public double ObdRelativeThrottlePosition { get; init; } = 0;
+
+  /// <summary>
+  /// OBD Intake Air Temperature (°C)
+  /// </summary>
+  [FromQuery(Name = "kf")]
+  public double ObdIntakeAirTemperature { get; init; } = 0;
+
+  /// <summary>
   /// OBD Trip Distance (km)
   /// </summary>
   [FromQuery(Name = "kff1204")]
