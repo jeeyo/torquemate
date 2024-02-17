@@ -1,6 +1,6 @@
 using Microsoft.OpenApi.Models;
 using Serilog;
-using TorqueToToe.Services;
+using TorqueMate.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,21 +26,21 @@ builder.Services.AddSwaggerGen(options =>
     options.SwaggerDoc("v1", new OpenApiInfo
     {
         Version = "v1",
-        Title = "TorqueToToe",
+        Title = "TorqueMate",
         Description = "A service to receive and store vehicle data from Torque Android App in database.",
         Contact = new OpenApiContact
         {
             Name = "GitHub",
-            Url = new Uri("https://github.com/jeeyo/torque-to-toe")
+            Url = new Uri("https://github.com/jeeyo/torquemate")
         },
         License = new OpenApiLicense
         {
             Name = "MIT License",
-            Url = new Uri("https://github.com/jeeyo/torque-to-toe/blob/main/LICENSE")
+            Url = new Uri("https://github.com/jeeyo/torquemate/blob/main/LICENSE")
         }
     });
 
-    var filePath = Path.Combine(AppContext.BaseDirectory, "TorqueToToe.xml");
+    var filePath = Path.Combine(AppContext.BaseDirectory, "TorqueMate.xml");
     options.IncludeXmlComments(filePath);
 });
 

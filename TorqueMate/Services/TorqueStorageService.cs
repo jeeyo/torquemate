@@ -1,10 +1,10 @@
 ﻿using Npgsql;
 using NpgsqlTypes;
 using Serilog;
-using TorqueToToe.Models.Torque;
+using TorqueMate.Models.Torque;
 using ILogger = Serilog.ILogger;
 
-namespace TorqueToToe.Services;
+namespace TorqueMate.Services;
 
 public interface ITorqueStorageService
 {

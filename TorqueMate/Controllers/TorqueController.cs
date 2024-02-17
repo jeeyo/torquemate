@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
-using TorqueToToe.Models.Torque;
-using TorqueToToe.Services;
+using TorqueMate.Models.Torque;
+using TorqueMate.Services;
 using ILogger = Serilog.ILogger;
 
-namespace TorqueToToe.Controllers;
+namespace TorqueMate.Controllers;
 
 [ApiController]
 [Route("v1/torque")]

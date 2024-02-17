@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TorqueToToe.Utilities;
+using TorqueMate.Utilities;
 
-namespace TorqueToToe.Models.Torque;
+namespace TorqueMate.Models.Torque;
 
 /// <summary>
 /// Data Transfer Object for Torque data

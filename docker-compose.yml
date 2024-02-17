@@ -7,7 +7,7 @@ services:
     # set shared memory limit when using docker-compose
     shm_size: 128mb
     environment:
-      POSTGRES_DB: torque_to_toe
+      POSTGRES_DB: torquemate
       POSTGRES_PASSWORD: fordevonly
     volumes:
       - ./migrations/bootstrap.sql:/docker-entrypoint-initdb.d/bootstrap.sql

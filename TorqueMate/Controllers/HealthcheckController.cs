@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TorqueToToe.Services;
+using TorqueMate.Services;
 
-namespace TorqueToToe;
+namespace TorqueMate;
 
 [ApiController]
 public class HealthcheckController : ControllerBase

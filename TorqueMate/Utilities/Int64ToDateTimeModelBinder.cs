@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace TorqueToToe.Utilities;
+namespace TorqueMate.Utilities;
 
 public class Int64ToDateTimeModelBinder : IModelBinder
 {
