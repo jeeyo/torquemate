@@ -1,6 +1,6 @@
 using Microsoft.OpenApi.Models;
 using Serilog;
-using TorqueToTesla.Services;
+using TorqueToToe.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,10 +12,9 @@ builder.Host.UseSerilog();
 
 // Add services to the container.
 builder.Services.AddLogging();
-builder.Services.AddMemoryCache();
 builder.Services.AddControllers();
 
-builder.Services.AddSingleton<IStorageService, StorageService>();
+builder.Services.AddSingleton<ITorqueStorageService, TorqueStorageService>();
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -25,21 +24,21 @@ builder.Services.AddSwaggerGen(options =>
     options.SwaggerDoc("v1", new OpenApiInfo
     {
         Version = "v1",
-        Title = "TorqueToTesla",
-        Description = "A service to receive and store vehicle data from Torque Android App and make it available to be polled as Tesla API",
+        Title = "TorqueToToe",
+        Description = "A service to receive and store vehicle data from Torque Android App in database.",
         Contact = new OpenApiContact
         {
             Name = "GitHub",
-            Url = new Uri("https://github.com/jeeyo/torque-to-tesla")
+            Url = new Uri("https://github.com/jeeyo/torque-to-toe")
         },
         License = new OpenApiLicense
         {
             Name = "MIT License",
-            Url = new Uri("https://github.com/jeeyo/torque-to-tesla/blob/main/LICENSE")
+            Url = new Uri("https://github.com/jeeyo/torque-to-toe/blob/main/LICENSE")
         }
     });
 
-    var filePath = Path.Combine(AppContext.BaseDirectory, "TorqueToTesla.xml");
+    var filePath = Path.Combine(AppContext.BaseDirectory, "TorqueToToe.xml");
     options.IncludeXmlComments(filePath);
 });
 

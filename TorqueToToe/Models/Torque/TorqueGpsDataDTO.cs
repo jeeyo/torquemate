@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace TorqueToTesla.Models.Torque;
+namespace TorqueToToe.Models.Torque;
 
 public partial record TorqueDataDTO
 {
@@ -14,13 +14,13 @@ public partial record TorqueDataDTO
   /// GPS Longitude (degrees)
   /// </summary>
   [FromQuery(Name = "kff1005")]
-  public double GpsLongitude { get; init; } = 0;
+  public List<double> GpsLongitude { get; init; } = [0, 0];
 
   /// <summary>
   /// GPS Latitude (degrees)
   /// </summary>
   [FromQuery(Name = "kff1006")]
-  public double GpsLatitude { get; init; } = 0;
+  public List<double> GpsLatitude { get; init; } = [0, 0];
 
   /// <summary>
   /// GPS Altitude (m)
@@ -39,4 +39,10 @@ public partial record TorqueDataDTO
   /// </summary>
   [FromQuery(Name = "kff1239")]
   public double GpsAccuracy { get; init; } = 0;
+
+  /// <summary>
+  /// GPS Satellites
+  /// </summary>
+  [FromQuery(Name = "kff123a")]
+  public double GpsSatellites { get; init; } = 0;
 }

@@ -1,54 +1,54 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace TorqueToTesla.Models.Torque;
+namespace TorqueToToe.Models.Torque;
 
 public partial record TorqueDataDTO
 {
   /// <summary>
   /// OBD Speed (km/h)
   /// </summary>
-  [FromQuery(Name = "k0d")]
+  [FromQuery(Name = "kd")]
   public double ObdSpeed { get; init; } = 0;
 
   /// <summary>
   /// OBD RPM
   /// </summary>
-  [FromQuery(Name = "k0c")]
+  [FromQuery(Name = "kc")]
   public double ObdRpm { get; init; } = 0;
+
+  /// <summary>
+  /// Engine Load (%)
+  /// </summary>
+  [FromQuery(Name = "k4")]
+  public double ObdEngineLoad { get; init; } = 0;
 
   /// <summary>
   /// OBD Coolant Temperature (°C)
   /// </summary>
-  [FromQuery(Name = "k05")]
+  [FromQuery(Name = "k5")]
   public double ObdCoolantTemperature { get; init; } = 0;
 
   /// <summary>
   /// OBD Battery Voltage (V)
   /// </summary>
-  [FromQuery(Name = "k2113")]
+  [FromQuery(Name = "kff1238")]
   public double ObdBatteryVoltage { get; init; } = 0;
 
   /// <summary>
-  /// OBD CO2 Emissions (g/km)
+  /// OBD Instananeous CO2 Emission (g/km)
   /// </summary>
   [FromQuery(Name = "kff1257")]
-  public double ObdCo2Emissions { get; init; } = 0;
+  public double ObdInstananeousCO2Emission { get; init; } = 0;
 
   /// <summary>
-  /// OBD Torque (Nm)
+  /// OBD Trip Distance (km)
   /// </summary>
-  [FromQuery(Name = "kff1225")]
-  public double ObdTorque { get; init; } = 0;
+  [FromQuery(Name = "kff1204")]
+  public double ObdTripDistance { get; init; } = 0;
 
   /// <summary>
-  /// OBD Instantaneous Fuel Consumption (km/l)
+  /// OBD Trip Time (s)
   /// </summary>
-  [FromQuery(Name = "kff1203")]
-  public double ObdInstataneousFuelConsumption { get; init; } = 0;
-
-  /// <summary>
-  /// OBD Fuel Level (%)
-  /// </summary>
-  [FromQuery(Name = "k2f")]
-  public double ObdFuelLevelPercentage { get; init; } = 0;
+  [FromQuery(Name = "kff1266")]
+  public double ObdTripTime { get; init; } = 0;
 }

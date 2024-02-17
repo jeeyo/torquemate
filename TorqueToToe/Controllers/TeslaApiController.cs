@@ -1,15 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TorqueToTesla.Services;
+using TorqueToToe.Services;
 
-namespace TorqueToTesla;
+namespace TorqueToToe;
 
 [ApiController]
 [Route("v1/tesla")]
 public class TeslaApiController : ControllerBase
 {
-  private readonly IStorageService _storageService;
+  private readonly ITorqueStorageService _storageService;
 
-  public TeslaApiController(IStorageService storageService)
+  public TeslaApiController(ITorqueStorageService storageService)
   {
     _storageService = storageService;
   }
