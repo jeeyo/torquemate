@@ -19,3 +19,10 @@ services:
     restart: always
     ports:
       - 8080:8080
+
+  # torquemate:
+  #   image: torquemate
+  #   environment:
+  #     ConnectionStrings__NpgsqlTorqueDatabase: Host=db; Port=5432; Database=torquemate; Username=postgres; Password=fordevonly; Include Error Detail=true;
+  #   ports:
+  #     - 5147:8080
