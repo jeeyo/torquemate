@@ -2,27 +2,42 @@ version: '3.9'
 
 services:
   db:
+    container_name: torquemate-db
     image: postgres:16
     restart: always
     # set shared memory limit when using docker-compose
     shm_size: 128mb
     environment:
       POSTGRES_DB: torquemate
+      POSTGRES_USER: torquemate
       POSTGRES_PASSWORD: fordevonly
     volumes:
       - ./migrations/bootstrap.sql:/docker-entrypoint-initdb.d/bootstrap.sql
-    ports:
-      - 5432:5432
 
   adminer:
+    container_name: torquemate-adminer
     image: adminer
     restart: always
     ports:
-      - 8080:8080
+      - 5145:8080
 
-  # torquemate:
-  #   image: torquemate
-  #   environment:
-  #     ConnectionStrings__NpgsqlTorqueDatabase: Host=db; Port=5432; Database=torquemate; Username=postgres; Password=fordevonly; Include Error Detail=true;
-  #   ports:
-  #     - 5147:8080
+  seq:
+    container_name: torquemate-seq
+    image: datalust/seq:latest
+    restart: always
+    environment:
+      ACCEPT_EULA: Y
+      # The password is "torquemate"
+      SEQ_FIRSTRUN_ADMINPASSWORD_HASH: QDOnqfrvVmbLnE+Lpe5VeEI+7R200enk1TTwqzcfE3aHzOgZtO6MZayx3Db66R9eTXFZnenJhJF6ggceCkravv0W6voa1H+ndFztPH06v4R5
+    ports:
+      - 5146:80
+
+  torquemate:
+    container_name: torquemate
+    image: ghcr.io/jeeyo/torquemate:main
+    restart: always
+    environment:
+      ConnectionStrings__NpgsqlTorqueDatabase: Host=db; Port=5432; Database=torquemate; Username=torquemate; Password=fordevonly; Include Error Detail=true;
+      Serilog__WriteTo__2__Args__serverUrl: http://seq:5341
+    ports:
+      - 5147:8080
