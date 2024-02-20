@@ -27,10 +27,21 @@ public class TorqueController : ControllerBase
   [ProducesResponseType(StatusCodes.Status200OK)]
   public async Task<ActionResult> UploadTorque([FromQuery] TorqueDataDTO torqueData)
   {
-    // TODO: Use Bearer token as Device ID if provided
+    // Use Bearer token as Device ID if provided
+    var deviceId = torqueData.DeviceId;
+    if (HttpContext.Request.Headers.TryGetValue("Authorization", out var auths))
+    {
+      var authHeader = auths.FirstOrDefault() ?? "";
+      if (authHeader.StartsWith("Bearer "))
+      {
+        deviceId = authHeader.Replace("Bearer ", "");
+      }
+    }
 
-    _logger.Information("Torque data uploaded: {TorqueData}", torqueData);
-    await _torqueStorageService.StoreTorqueData(torqueData);
+    var newTorqueData = torqueData with { DeviceId = deviceId };
+
+    _logger.Information("Torque data uploaded: {TorqueData}", newTorqueData);
+    await _torqueStorageService.StoreTorqueData(newTorqueData);
 
     // Torque requires the upload endpoint to respond "OK!"
     return Ok("OK!");

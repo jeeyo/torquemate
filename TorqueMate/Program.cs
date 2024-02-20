@@ -16,7 +16,6 @@ builder.Host.UseSerilog();
 builder.Services.AddLogging();
 builder.Services.AddControllers();
 builder.Services.AddNpgsqlDataSource(builder.Configuration.GetConnectionString("NpgsqlTorqueDatabase") ?? "");
-builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddSingleton<ITorqueStorageService, TorqueStorageService>();
 
