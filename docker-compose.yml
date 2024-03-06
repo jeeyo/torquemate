@@ -34,9 +34,11 @@ services:
 
   torquemate:
     container_name: torquemate
-    image: ghcr.io/jeeyo/torquemate:main
+    image: ghcr.io/jeeyo/torquemate:latest
     restart: always
     environment:
+      ConnectionStrings__NpgsqlTorqueDatabase: Host=db; Port=5432; Database=torquemate; Username=torquemate; Password=fordevonly; Include Error Detail=true;
+      Serilog__WriteTo__1__Args__serverUrl: http://seq:5341
     volumes:
       - /tmp/migrations/:/migrations/:rshared
     ports:
