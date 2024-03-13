@@ -41,7 +41,7 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 
-    var filePath = Path.Combine(AppContext.BaseDirectory, "TorqueMate.xml");
+    var filePath = Path.Combine(AppContext.BaseDirectory, "TorqueMate.Api.xml");
     options.IncludeXmlComments(filePath);
 });
 

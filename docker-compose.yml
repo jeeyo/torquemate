@@ -12,7 +12,9 @@ services:
       POSTGRES_USER: torquemate
       POSTGRES_PASSWORD: fordevonly
     volumes:
-      - /tmp/migrations/bootstrap.sql:/docker-entrypoint-initdb.d/bootstrap.sql:rshared
+      - ./migrations/bootstrap.sql:/docker-entrypoint-initdb.d/bootstrap.sql
+    ports:
+      - 5432:5432
 
   adminer:
     container_name: torquemate-adminer
