@@ -20,17 +20,8 @@ services:
     restart: always
     ports:
       - 5145:8080
-
-  seq:
-    container_name: torquemate-seq
-    image: datalust/seq:latest
-    restart: always
-    environment:
-      ACCEPT_EULA: Y
-      # The password is "torquemate"
-      SEQ_FIRSTRUN_ADMINPASSWORD_HASH: QDOnqfrvVmbLnE+Lpe5VeEI+7R200enk1TTwqzcfE3aHzOgZtO6MZayx3Db66R9eTXFZnenJhJF6ggceCkravv0W6voa1H+ndFztPH06v4R5
-    ports:
-      - 5146:80
+    depends_on:
+      - db
 
   torquemate:
     container_name: torquemate
@@ -38,8 +29,9 @@ services:
     restart: always
     environment:
       ConnectionStrings__NpgsqlTorqueDatabase: Host=db; Port=5432; Database=torquemate; Username=torquemate; Password=fordevonly; Include Error Detail=true;
-      Serilog__WriteTo__1__Args__serverUrl: http://seq:5341
     volumes:
       - /tmp/migrations/:/migrations/:rshared
     ports:
       - 5147:8080
+    depends_on:
+      - db
