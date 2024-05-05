@@ -31,8 +31,6 @@ services:
     restart: always
     environment:
       ConnectionStrings__NpgsqlTorqueDatabase: Host=db; Port=5432; Database=torquemate; Username=torquemate; Password=fordevonly; Include Error Detail=true;
-    volumes:
-      - /tmp/migrations/:/migrations/:rshared
     ports:
       - 5147:8080
     depends_on:
