@@ -16,12 +16,12 @@ services:
     ports:
       - 5432:5432
 
-  adminer:
-    container_name: torquemate-adminer
-    image: adminer
+  grafana:
+    container_name: torquemate-grafana
+    image: grafana/grafana-oss:10.3.4
     restart: always
     ports:
-      - 5145:8080
+      - 3000:3000
     depends_on:
       - db
 
