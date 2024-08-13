@@ -630,18 +630,18 @@
           "type": "grafana-postgresql-datasource",
           "uid": "${DS_TORQUEMATE-POSTGRESQL-DATASOURCE}"
         },
-        "definition": "SELECT COALESCE(TO_CHAR(time AT TIME ZONE 'GMT+7', 'DD-MM-YYYY HH24:MI:SS'), '') AS __text, session_id AS __value\nFROM (\n    SELECT session_id, time, device_id,\n           ROW_NUMBER() over (PARTITION BY device_id, session_id ORDER BY time ASC) AS rn,\n           COUNT(*) over () AS total_count\n    FROM torque_data\n    WHERE device_id = '$device_id'\n) t\nWHERE rn = 1\nOR rn = total_count",
+        "definition": "SELECT COALESCE(TO_CHAR(time AT TIME ZONE 'GMT+7', 'YYYY-MM-DD HH24:MI:SS'), '') AS __text, session_id AS __value\nFROM (\n    SELECT session_id, time, device_id,\n           ROW_NUMBER() over (PARTITION BY device_id, session_id ORDER BY time ASC) AS rn,\n           COUNT(*) over () AS total_count\n    FROM torque_data\n    WHERE device_id = '$device_id'\n) t\nWHERE rn = 1\nOR rn = total_count",
         "hide": 0,
         "includeAll": false,
         "label": "Session",
         "multi": false,
         "name": "session_id",
         "options": [],
-        "query": "SELECT COALESCE(TO_CHAR(time AT TIME ZONE 'GMT+7', 'DD-MM-YYYY HH24:MI:SS'), '') AS __text, session_id AS __value\nFROM (\n    SELECT session_id, time, device_id,\n           ROW_NUMBER() over (PARTITION BY device_id, session_id ORDER BY time ASC) AS rn,\n           COUNT(*) over () AS total_count\n    FROM torque_data\n    WHERE device_id = '$device_id'\n) t\nWHERE rn = 1\nOR rn = total_count",
+        "query": "SELECT COALESCE(TO_CHAR(time AT TIME ZONE 'GMT+7', 'YYYY-MM-DD HH24:MI:SS'), '') AS __text, session_id AS __value\nFROM (\n    SELECT session_id, time, device_id,\n           ROW_NUMBER() over (PARTITION BY device_id, session_id ORDER BY time ASC) AS rn,\n           COUNT(*) over () AS total_count\n    FROM torque_data\n    WHERE device_id = '$device_id'\n) t\nWHERE rn = 1\nOR rn = total_count",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
-        "sort": 3,
+        "sort": 4,
         "type": "query"
       },
       {
@@ -675,6 +675,6 @@
   "timezone": "",
   "title": "TorqueMate Basic",
   "uid": "af530d07-f342-4b01-ab00-1a548ef9f968",
-  "version": 19,
+  "version": 20,
   "weekStart": ""
 }
