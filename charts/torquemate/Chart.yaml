@@ -1,0 +1,15 @@
+apiVersion: v2
+name: torquemate
+version: 0.1.0
+appVersion: 0.1.0
+type: application
+description: A car data logger that retrieve data from Torque Android App
+sources:
+  - https://github.com/jeeyo/torquemate
+maintainers:
+  - name: jeeyo
+    email: jeeyo@outlook.com
+keywords:
+  - elm327
+  - obd2
+  - torque

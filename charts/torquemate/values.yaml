@@ -1,0 +1,20 @@
+replicaCount: 1
+
+nameOverride: ""
+fullnameOverride: ""
+
+image:
+  repository: ghcr.io/jeeyo/torquemate
+  pullPolicy: IfNotPresent
+  tag: latest
+
+service:
+  type: ClusterIP
+  port: 80
+
+database:
+  host: ""
+  port: 5432
+  database: torquemate
+  username: torquemate
+  password: ""
