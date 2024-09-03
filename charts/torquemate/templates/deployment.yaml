@@ -21,6 +21,8 @@ spec:
           env:
             - name: ASPNETCORE_HTTP_PORTS
               value: 80
+            - name: ConnectionStrings__NpgsqlTorqueDatabase
+              value: Host={{ .Values.database.host }}; Port={{ .Values.database.port }}; Database={{ .Values.database.database }}; Username={{ .Values.database.username }}; Password={{ .Values.database.password }}; Include Error Detail=true;
           ports:
             - name: http
               containerPort: 80
