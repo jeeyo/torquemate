@@ -1,0 +1,14 @@
+apiVersion: v2
+name: torquemate
+description: >
+  A Helm chart for deploying TorqueMate – a vehicle telemetry API built on
+  ASP.NET Core 10.0, backed by PostgreSQL 16.
+type: application
+version: 0.1.0
+appVersion: "latest"
+
+dependencies:
+  - name: postgresql
+    version: "15.x.x"
+    repository: https://charts.bitnami.com/bitnami
+    condition: postgresql.enabled
