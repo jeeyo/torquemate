@@ -1,0 +1,50 @@
+TorqueMate has been deployed.
+
+=== API ===
+Release    : {{ .Release.Name }}
+Namespace  : {{ .Release.Namespace }}
+Image      : {{ .Values.image.repository }}:{{ include "torquemate.imageTag" . }}
+
+{{- if .Values.ingress.enabled }}
+
+The API is accessible at:
+{{- range .Values.ingress.hosts }}
+  http{{ if $.Values.ingress.tls }}s{{ end }}://{{ .host }}
+{{- end }}
+{{- else if eq .Values.service.type "NodePort" }}
+
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "torquemate.fullname" . }})
+  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+  echo "http://$NODE_IP:$NODE_PORT"
+{{- else if eq .Values.service.type "LoadBalancer" }}
+
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "torquemate.fullname" . }} --template "{{`{{range (index .status.loadBalancer.ingress 0)}}{{.}}{{end}}`}}")
+  echo "http://$SERVICE_IP:{{ .Values.service.port }}"
+{{- else }}
+
+  # Port-forward to test locally:
+  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "torquemate.fullname" . }} 8080:{{ .Values.service.port }}
+  # Then open: http://127.0.0.1:8080
+{{- end }}
+
+=== Database ===
+Mode: {{ .Values.database.mode }}
+{{- if eq .Values.database.mode "internal" }}
+Service : {{ include "torquemate.fullname" . }}-postgresql:5432
+{{- else }}
+Host    : {{ .Values.database.external.host }}:{{ .Values.database.external.port }}
+{{- end }}
+{{- if .Values.dbInit.enabled }}
+Schema init: bootstrap.sql applied as a pre-install/pre-upgrade Job (idempotent).
+{{- end }}
+
+=== Useful commands ===
+# List all resources for this release:
+kubectl get all --namespace {{ .Release.Namespace }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+# Watch the DB init Job logs:
+kubectl logs --namespace {{ .Release.Namespace }} -l app.kubernetes.io/component=db-init -f
+
+# Upgrade with a new image tag:
+helm upgrade {{ .Release.Name }} ./charts/torquemate --set image.tag=sha-abc1234

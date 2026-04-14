@@ -1,0 +1,172 @@
+# --------------------------------------------------------------------------- #
+#  TorqueMate API
+# --------------------------------------------------------------------------- #
+replicaCount: 1
+
+image:
+  repository: ghcr.io/jeeyo/torquemate
+  pullPolicy: IfNotPresent
+  # Overrides appVersion from Chart.yaml.
+  # Use a short SHA tag (e.g. sha-abc1234) for pinned deploys.
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext:
+  fsGroup: 2000
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 80
+  # Container always listens on 8080 per the Dockerfile.
+  targetPort: 8080
+
+# --------------------------------------------------------------------------- #
+#  Ingress
+# --------------------------------------------------------------------------- #
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+    - host: torquemate.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+  #  - secretName: torquemate-tls
+  #    hosts:
+  #      - torquemate.example.com
+
+# --------------------------------------------------------------------------- #
+#  Resources / autoscaling
+# --------------------------------------------------------------------------- #
+resources:
+  limits:
+    cpu: 500m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+livenessProbe:
+  httpGet:
+    path: /healthcheck
+    port: http
+  initialDelaySeconds: 15
+  periodSeconds: 20
+
+readinessProbe:
+  httpGet:
+    path: /healthcheck
+    port: http
+  initialDelaySeconds: 5
+  periodSeconds: 10
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+# --------------------------------------------------------------------------- #
+#  Database configuration
+# --------------------------------------------------------------------------- #
+database:
+  # ---- Mode selection -------------------------------------------------------
+  # "internal"  – deploy the Bitnami postgresql subchart.
+  #               postgresql.enabled must also remain true (the default).
+  # "external"  – point at an existing PostgreSQL instance. Supply either a
+  #               full connectionString OR the individual host/port/… params.
+  mode: internal     # "internal" | "external"
+
+  # ---- External mode --------------------------------------------------------
+  external:
+    # Option A: full Npgsql connection string.
+    # If set, all individual params below are ignored.
+    connectionString: ""
+
+    # Option B: individual params (used only when connectionString is empty).
+    host: ""
+    port: 5432
+    database: torquemate
+    username: torquemate
+    password: ""
+
+  # ---- Existing secret (optional) ------------------------------------------
+  # Name of a pre-existing Secret that holds the connection string.
+  # When set, the chart will NOT create a Secret and will reference this one.
+  existingSecret: ""
+  existingSecretKey: "connection-string"
+
+# --------------------------------------------------------------------------- #
+#  DB schema initialisation Job
+# --------------------------------------------------------------------------- #
+dbInit:
+  # Runs a pre-install/pre-upgrade Job that applies bootstrap.sql (idempotent).
+  enabled: true
+  image:
+    repository: postgres
+    tag: "16"
+    pullPolicy: IfNotPresent
+  hookWeight: "-5"
+  passwordSecretKey: "password"
+  resources:
+    limits:
+      cpu: 200m
+      memory: 128Mi
+    requests:
+      cpu: 50m
+      memory: 64Mi
+
+# --------------------------------------------------------------------------- #
+#  Bitnami postgresql subchart values
+#  (only used when database.mode == "internal")
+# --------------------------------------------------------------------------- #
+postgresql:
+  enabled: false
+
+  auth:
+    database: torquemate
+    username: torquemate
+    # IMPORTANT: change this before deploying to production.
+    password: changeme
+
+  primary:
+    persistence:
+      enabled: true
+      size: 8Gi
+
+    # Run bootstrap.sql via PostgreSQL's initdb mechanism on first start.
+    initdb:
+      scriptsConfigMap: ""  # set at deploy time via _helpers; see deployment notes
+
+  image:
+    tag: "16"

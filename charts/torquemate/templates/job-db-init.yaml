@@ -1,0 +1,76 @@
+{{- if .Values.dbInit.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "torquemate.fullname" . }}-db-init
+  labels:
+    {{- include "torquemate.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": {{ .Values.dbInit.hookWeight | quote }}
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  backoffLimit: 3
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: db-init
+        {{- include "torquemate.selectorLabels" . | nindent 8 }}
+    spec:
+      restartPolicy: OnFailure
+      automountServiceAccountToken: true
+      initContainers:
+        - name: wait-for-postgres
+          image: "{{ .Values.dbInit.image.repository }}:{{ .Values.dbInit.image.tag }}"
+          imagePullPolicy: {{ .Values.dbInit.image.pullPolicy }}
+          command:
+            - sh
+            - -c
+            - |
+              until pg_isready -h "$PGHOST" -p "$PGPORT" -U "$PGUSER"; do
+                echo "Waiting for PostgreSQL at $PGHOST:$PGPORT…"
+                sleep 2
+              done
+              echo "PostgreSQL is ready."
+          env:
+            - name: PGHOST
+              value: {{ include "torquemate.pgHost" . | quote }}
+            - name: PGPORT
+              value: {{ include "torquemate.pgPort" . | quote }}
+            - name: PGUSER
+              value: {{ include "torquemate.pgUser" . | quote }}
+      containers:
+        - name: db-init
+          image: "{{ .Values.dbInit.image.repository }}:{{ .Values.dbInit.image.tag }}"
+          imagePullPolicy: {{ .Values.dbInit.image.pullPolicy }}
+          resources:
+            {{- toYaml .Values.dbInit.resources | nindent 12 }}
+          command:
+            - sh
+            - -c
+            - |
+              echo "Applying bootstrap.sql…"
+              psql -h "$PGHOST" -p "$PGPORT" -U "$PGUSER" -d "$PGDATABASE" -f /bootstrap/bootstrap.sql
+              echo "Done."
+          env:
+            - name: PGHOST
+              value: {{ include "torquemate.pgHost" . | quote }}
+            - name: PGPORT
+              value: {{ include "torquemate.pgPort" . | quote }}
+            - name: PGUSER
+              value: {{ include "torquemate.pgUser" . | quote }}
+            - name: PGDATABASE
+              value: {{ include "torquemate.pgDatabase" . | quote }}
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "torquemate.dbSecretName" . }}
+                  key: {{ .Values.dbInit.passwordSecretKey }}
+          volumeMounts:
+            - name: bootstrap-sql
+              mountPath: /bootstrap
+      volumes:
+        - name: bootstrap-sql
+          configMap:
+            name: {{ include "torquemate.fullname" . }}-bootstrap-sql
+{{- end }}
