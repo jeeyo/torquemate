@@ -18,7 +18,7 @@ spec:
         {{- include "torquemate.selectorLabels" . | nindent 8 }}
     spec:
       restartPolicy: OnFailure
-      serviceAccountName: {{ include "torquemate.serviceAccountName" . }}
+      automountServiceAccountToken: false
       initContainers:
         - name: wait-for-postgres
           image: "{{ .Values.dbInit.image.repository }}:{{ .Values.dbInit.image.tag }}"
