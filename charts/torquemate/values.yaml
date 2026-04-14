@@ -137,7 +137,7 @@ dbInit:
     tag: "16"
     pullPolicy: IfNotPresent
   hookWeight: "-5"
-  passwordSecretKey: "postgres-password"
+  passwordSecretKey: "password"
   resources:
     limits:
       cpu: 200m
@@ -151,7 +151,7 @@ dbInit:
 #  (only used when database.mode == "internal")
 # --------------------------------------------------------------------------- #
 postgresql:
-  enabled: true
+  enabled: false
 
   auth:
     database: torquemate
