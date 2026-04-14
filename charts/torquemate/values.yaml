@@ -137,6 +137,7 @@ dbInit:
     tag: "16"
     pullPolicy: IfNotPresent
   hookWeight: "-5"
+  passwordSecretKey: "postgres-password"
   resources:
     limits:
       cpu: 200m
